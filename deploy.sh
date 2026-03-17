@@ -5,7 +5,7 @@ set -e
 cd "$(dirname "$0")"
 
 echo "Building frontend..."
-npm run build
+VITE_BASE_PATH=/mirofish/ VITE_API_BASE_URL=/mirofish/api npm run build
 
 echo "Copying to /var/www/mirofish..."
 rm -rf /var/www/mirofish/*
@@ -18,4 +18,4 @@ systemctl restart mirofish-backend
 echo "Reloading Caddy..."
 systemctl reload caddy
 
-echo "✅ MiroFish deployed! Access at http://152.42.231.162:3080"
+echo "✅ MiroFish deployed! Access at https://152.42.231.162/mirofish/"
