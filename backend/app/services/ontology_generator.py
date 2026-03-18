@@ -9,36 +9,36 @@ from ..utils.llm_client import LLMClient
 
 
 # 本体生成的系统提示词
-ONTOLOGY_SYSTEM_PROMPT = """你是一个专业的知识图谱本体设计专家。你的任务是分析给定的文本内容和模拟需求，设计适合**社交媒体舆论模拟**的实体类型和关系类型。
+ONTOLOGY_SYSTEM_PROMPT = """You are a professional knowledge graph ontology design expert. Your task is to analyze given text content and simulation requirements, and design entity types and relationship types suitable for **social media public opinion simulation**.
 
-**重要：你必须输出有效的JSON格式数据，不要输出任何其他内容。**
+**IMPORTANT: You must output valid JSON format data. Do not output any other content.**
 
-## 核心任务背景
+## Core Task Background
 
-我们正在构建一个**社交媒体舆论模拟系统**。在这个系统中：
-- 每个实体都是一个可以在社交媒体上发声、互动、传播信息的"账号"或"主体"
-- 实体之间会相互影响、转发、评论、回应
-- 我们需要模拟舆论事件中各方的反应和信息传播路径
+We are building a **social media public opinion simulation system**. In this system:
+- Each entity is an "account" or "subject" that can speak, interact, and spread information on social media
+- Entities influence each other, repost, comment, and respond
+- We need to simulate the reactions and information propagation paths of various parties in public opinion events
 
-因此，**实体必须是现实中真实存在的、可以在社媒上发声和互动的主体**：
+Therefore, **entities must be real-world subjects that can speak and interact on social media**:
 
-**可以是**：
-- 具体的个人（公众人物、当事人、意见领袖、专家学者、普通人）
-- 公司、企业（包括其官方账号）
-- 组织机构（大学、协会、NGO、工会等）
-- 政府部门、监管机构
-- 媒体机构（报纸、电视台、自媒体、网站）
-- 社交媒体平台本身
-- 特定群体代表（如校友会、粉丝团、维权群体等）
+**Can be**:
+- Specific individuals (public figures, parties involved, opinion leaders, experts, ordinary people)
+- Companies/enterprises (including their official accounts)
+- Organizations (universities, associations, NGOs, unions, etc.)
+- Government departments, regulatory agencies
+- Media organizations (newspapers, TV stations, self-media, websites)
+- Social media platforms themselves
+- Representatives of specific groups (alumni associations, fan groups, advocacy groups, etc.)
 
-**不可以是**：
-- 抽象概念（如"舆论"、"情绪"、"趋势"）
-- 主题/话题（如"学术诚信"、"教育改革"）
-- 观点/态度（如"支持方"、"反对方"）
+**Cannot be**:
+- Abstract concepts (e.g., "public opinion", "emotion", "trend")
+- Topics/themes (e.g., "academic integrity", "education reform")
+- Views/attitudes (e.g., "supporters", "opponents")
 
-## 输出格式
+## Output Format
 
-请输出JSON格式，包含以下结构：
+Output in JSON format with the following structure:
 
 ```json
 {
@@ -66,7 +66,7 @@ ONTOLOGY_SYSTEM_PROMPT = """你是一个专业的知识图谱本体设计专家�
             "attributes": []
         }
     ],
-    "analysis_summary": "对文本内容的简要分析说明（中文）"
+    "analysis_summary": "Brief analysis summary of the text content (in English)"
 }
 ```
 
@@ -158,7 +158,7 @@ B. **具体类型（8个，根据文本内容设计）**：
 class OntologyGenerator:
     """
     本体生成器
-    分析文本内容，生成实体和关系类型定义
+    Analyze text content and generate entity and relationship type definitions
     """
     
     def __init__(self, llm_client: Optional[LLMClient] = None):
@@ -223,7 +223,7 @@ class OntologyGenerator:
         # 如果文本超过5万字，截断（仅影响传给LLM的内容，不影响图谱构建）
         if len(combined_text) > self.MAX_TEXT_LENGTH_FOR_LLM:
             combined_text = combined_text[:self.MAX_TEXT_LENGTH_FOR_LLM]
-            combined_text += f"\n\n...(原文共{original_length}字，已截取前{self.MAX_TEXT_LENGTH_FOR_LLM}字用于本体分析)..."
+            combined_text += f"\n\n...(Original text has {original_length} chars, truncated to first {self.MAX_TEXT_LENGTH_FOR_LLM} chars for ontology analysis)..."
         
         message = f"""## 模拟需求
 
@@ -242,7 +242,7 @@ class OntologyGenerator:
 """
         
         message += """
-请根据以上内容，设计适合社会舆论模拟的实体类型和关系类型。
+Based on the above content, design entity types and relationship types suitable for social opinion simulation. Output everything in English.
 
 **必须遵守的规则**：
 1. 必须正好输出10个实体类型

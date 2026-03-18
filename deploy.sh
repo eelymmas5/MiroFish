@@ -5,7 +5,7 @@ set -e
 cd "$(dirname "$0")"
 
 echo "Building frontend..."
-VITE_BASE_PATH=/mirofish/ VITE_API_BASE_URL=/mirofish/api npm run build
+VITE_BASE_PATH=/mirofish/ VITE_API_BASE_URL=/mirofish npm run build
 
 echo "Copying to /var/www/mirofish..."
 rm -rf /var/www/mirofish/*
